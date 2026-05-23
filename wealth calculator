@@ -1,0 +1,68 @@
+/*
+This program calculates whether a person can achieve their target wealth within a specified number of years, given their current personal balance and a fixed growth rate. The user is prompted to enter their target wealth, current personal balance, and the number of years they want to achieve their target wealth. The program then calculates the future value of the personal balance after the specified number of years and compares it to the target wealth, providing feedback on whether the target will be achieved or not.
+Created on May 23, 2026
+Author: Josiah
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+
+double target_wealth;
+double personal_balance;
+int years;
+
+void WelcomingMessage(){
+    printf("==============================\n");
+    printf("Welcome to the Wealth Calculator!\n");
+    printf("==============================\n");
+}
+
+int main(){
+    srand(time(NULL));
+    WelcomingMessage();
+    int choice = -1;
+
+    printf("Enter your target wealth: ");
+   choice = scanf("%lf", &target_wealth);
+    if (choice != 1) {
+        printf("Invalid input for target wealth.\n");
+        return 1;
+    } else if (target_wealth <= 0) {
+        printf("Please enter a valid number for target wealth.\n");
+        return 1;
+    }
+
+    printf("Enter your current personal balance: ");
+    if (scanf("%lf", &personal_balance) != 1) {
+        printf("Invalid input for personal balance.\n");
+        return 1;
+    } else if (personal_balance < 0) {
+        printf("Please enter a valid number for personal balance.\n");
+        return 1;
+    }
+
+    printf("Enter the number of years you want to achieve your target wealth: ");
+    if (scanf("%d", &years) != 1) {
+        printf("Invalid input for years.\n");
+        return 1;
+    } else if (years <= 0) {
+        printf("Please enter a valid number for years.\n");
+        return 1;
+    }
+
+    printf("\nCalculating your wealth growth...\n");
+
+    const double GROWTH_RATE = 0.05;
+    
+    personal_balance *= pow(1 + GROWTH_RATE, years);
+    if (personal_balance >= target_wealth) {
+        printf("Congratulations! You will achieve your target wealth in %d years.\n", years);
+    } else {
+        printf("Unfortunately, you will not achieve your target wealth in %d years.\n", years);
+        double gap = target_wealth - personal_balance;
+        printf("You need $%.2f more to reach your target wealth.\n", gap);
+    }
+    return 0;
+}
