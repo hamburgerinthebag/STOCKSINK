@@ -1,0 +1,44 @@
+#include <stdio.h>
+
+// Data Models
+typedef struct{
+    double inflation_rate;
+    double interest_rate;
+} MarketConditions;
+typedef struct{
+    char owner_name[50];
+    double initial_amount;
+    double monthly_contribution;
+} Portfolio;
+// The math for calculating the future value of a series of monthly contributions with compounding interest is:
+// Future Value = P * [((1 + r/n)^(nt) - 1) / (r/n)]
+// Where:
+// P = monthly contribution
+// r = annual interest rate (as a decimal)
+// n = number of times interest is compounded per year (12 for monthly)
+// t = number of years
+void simulatedYear(Portfolio *portfolio, MarketConditions *conditions, int year) {
+    double monthly_rate = conditions->interest_rate / 12.0;
+    double amount = portfolio->initial_amount;
+    double total_contribution = 0.0;
+
+    for (int i = 0; i < 12; ++i) {
+        amount += portfolio->monthly_contribution;
+        amount *= (1 + monthly_rate);
+        total_contribution += portfolio->monthly_contribution;
+    }
+
+    // Adjust for inflation at the end of the year
+    portfolio->initial_amount = amount; // Update for next year's calculation
+    double final_amount = amount / (1 + conditions->inflation_rate); // Inflation-adjust
+
+    printf("After year %d, %s's portfolio is worth: $%.2f (inflation-adjusted), $%.2f (nominal)\n",
+           year, portfolio->owner_name, final_amount, amount);
+}
+// Final Output
+int main(){
+    Portfolio myPortfolio = {.owner_name = "Ven", .initial_amount = 10000.0, .monthly_contribution = 500.0};
+    MarketConditions conditions = {.inflation_rate = 0.15, .interest_rate = 0.05};
+    simulatedYear(&myPortfolio, &conditions, 1);
+    return 0;
+}
