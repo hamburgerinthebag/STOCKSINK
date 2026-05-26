@@ -1,0 +1,66 @@
+#include <stdio.h>
+
+void displayMenu() {
+    printf("Welcome to the Bank!\n");
+    printf("1. Check Balance\n");
+    printf("2. Deposit Money\n");
+    printf("3. Withdraw Money\n");
+    printf("4. Exit\n");
+}
+
+int main() {
+    double balance = 0.0; // Starting balance
+    printf("Please enter your starting balance: ");
+    if (scanf("%lf", &balance) != 1 || balance < 0) {
+        printf("Invalid input.\n");
+        while (getchar() != '\n');
+        return 1;
+    }
+    
+    int choice;
+    double amount;
+
+    while (1) {
+        displayMenu();
+        printf("Please enter your choice: ");
+        
+       
+        if (scanf("%d", &choice) != 1) {
+            printf("Invalid input. Please enter a number.\n");
+            while (getchar() != '\n'); // Clear the broken input buffer
+            continue;                  // Skip the rest of the loop and try again
+        } 
+
+        switch (choice) {
+            case 1:
+                printf("Your current balance is: $%.2f\n", balance);
+                break;
+            case 2:
+                printf("Enter amount to deposit: ");
+                scanf("%lf", &amount);
+                if (amount > 0) {
+                    balance += amount;
+                    printf("You deposited $%.2f. New balance: $%.2f\n", amount, balance);
+                } else {
+                    printf("Invalid amount. Please enter a positive number.\n");
+                }
+                break;
+            case 3:
+                printf("Enter amount to withdraw: ");
+                scanf("%lf", &amount);
+                if (amount > 0 && amount <= balance) {
+                    balance -= amount;
+                    printf("You withdrew $%.2f. New balance: $%.2f\n", amount, balance);
+                } else {
+                    printf("Invalid amount. Please enter a positive number that does not exceed your balance.\n");
+                }
+                break;
+            case 4:
+                printf("Thank you for banking with us! Goodbye!\n");
+                return 0;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+        printf("\n");
+    }
+}
